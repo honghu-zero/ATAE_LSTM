@@ -5,8 +5,10 @@ from theano.tensor.shared_randomstreams import RandomStreams
 import numpy as np
 import argparse
 import time
+import cPickle
 import collections
 from WordLoader import WordLoader
+
 
 class AttentionLstm(object):
     def __init__(self, wordlist, argv, aspect_num=0):
@@ -144,3 +146,28 @@ class AttentionLstm(object):
                 not_found += 1
         print("not_found num :", not_found)
         self.Vw.set_value(Vw)
+
+    def save_model(self):
+        print("===== ckpt saving ======")
+
+        Vw = np.array(self.Vw.get_value(borrow=True))
+        Wi = np.array(self.Wi.get_value(borrow=True))
+        Wo = np.array(self.Wo.get_value(borrow=True))
+        Wf = np.array(self.Wf.get_value(borrow=True))
+        Wc = np.array(self.Wc.get_value(borrow=True))
+        bi = np.array(self.bi.get_value(borrow=True))
+        bo = np.array(self.bo.get_value(borrow=True))
+        bf = np.array(self.bf.get_value(borrow=True))
+        bc = np.array(self.bc.get_value(borrow=True))
+
+        Ws = np.array(self.Ws.get_value(borrow=True))
+        bs = np.array(self.bs.get_value(borrow=True))
+        Wh = np.array(self.Wh.get_value(borrow=True))
+        Wx = np.array(self.Wx.get_value(borrow=True))
+        Va = np.array(self.Va.get_value(borrow=True))
+
+        np.savez("./result/model.npz", Vw = Vw, Wi = Wi, Wo = Wo, Wf = Wf, Wc = Wc, bi = bi, 
+                 bo = bo, bf = bf, bc = bc, Ws = Ws, bs = bs, Wh = Wh, Wx = Wx, Va = Va)
+
+        r = np.load("./result/model.npz")
+        print(r.files)

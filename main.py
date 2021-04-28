@@ -77,8 +77,6 @@ if __name__ == '__main__':
     parser.add_argument('--batch', type=int, default=25)
     args, _ = parser.parse_known_args(argv)
 
-
-
     random.seed(args.seed)
     data = DataManager(args.dataset)
     wordlist = data.gen_word()
@@ -109,11 +107,8 @@ if __name__ == '__main__':
         with open('result/%s.txt' % args.name, 'w') as f:
             f.writelines(json.dumps(details))
 
+    model.save_model()
+
     print("================ success !======================")
-
-
     end = time.time()
-
     print('Running time: %s Seconds' % (end - start))
-
-
